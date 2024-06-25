@@ -1,0 +1,303 @@
+
+Lavuhka_00.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001cc  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000004  00800060  00800060  00000240  2**0
+                  ALLOC
+  2 .stab         000006cc  00000000  00000000  00000240  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  3 .stabstr      00000097  00000000  00000000  0000090c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_aranges 00000020  00000000  00000000  000009a3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_pubnames 00000041  00000000  00000000  000009c3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   000000da  00000000  00000000  00000a04  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000008c  00000000  00000000  00000ade  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000266  00000000  00000000  00000b6a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000030  00000000  00000000  00000dd0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000000a2  00000000  00000000  00000e00  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_pubtypes 0000001e  00000000  00000000  00000ea2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__vector_19>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a4 36       	cpi	r26, 0x64	; 100
+  6c:	b1 07       	cpc	r27, r17
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 55 00 	call	0xaa	; 0xaa <main>
+  74:	0c 94 e4 00 	jmp	0x1c8	; 0x1c8 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <__vector_19>:
+#define sound_input 1      // управляющий сигнал для звукового модуля
+#define sound_output 7     // управляющий сигнал для звукового модуля
+#define sound_reset 0      // управляющий сигнал для звукового модуля
+volatile unsigned int action,pause2;   
+ ISR  (TIMER0_COMP_vect)  //прерывание таймера T0
+  {
+  7c:	1f 92       	push	r1
+  7e:	0f 92       	push	r0
+  80:	0f b6       	in	r0, 0x3f	; 63
+  82:	0f 92       	push	r0
+  84:	11 24       	eor	r1, r1
+  86:	8f 93       	push	r24
+  88:	9f 93       	push	r25
+	pause2++; 
+  8a:	80 91 60 00 	lds	r24, 0x0060
+  8e:	90 91 61 00 	lds	r25, 0x0061
+  92:	01 96       	adiw	r24, 0x01	; 1
+  94:	90 93 61 00 	sts	0x0061, r25
+  98:	80 93 60 00 	sts	0x0060, r24
+  }	 
+  9c:	9f 91       	pop	r25
+  9e:	8f 91       	pop	r24
+  a0:	0f 90       	pop	r0
+  a2:	0f be       	out	0x3f, r0	; 63
+  a4:	0f 90       	pop	r0
+  a6:	1f 90       	pop	r1
+  a8:	18 95       	reti
+
+000000aa <main>:
+//*******************//
+//*******************//
+int main(void)
+{
+	DDRC &=~(1<<sound_input);
+  aa:	a1 98       	cbi	0x14, 1	; 20
+	DDRC |= (1<<sound_output);	
+  ac:	a7 9a       	sbi	0x14, 7	; 20
+	PORTC |=(1<<sound_output);
+  ae:	af 9a       	sbi	0x15, 7	; 21
+	DDRC |=(1<<sound_reset);
+  b0:	a0 9a       	sbi	0x14, 0	; 20
+	PORTC |=(1<<sound_reset);
+  b2:	a8 9a       	sbi	0x15, 0	; 21
+	TCCR0 = 0b00001101;  
+  b4:	8d e0       	ldi	r24, 0x0D	; 13
+  b6:	83 bf       	out	0x33, r24	; 51
+    TIMSK|=(1<<1);
+  b8:	89 b7       	in	r24, 0x39	; 57
+  ba:	82 60       	ori	r24, 0x02	; 2
+  bc:	89 bf       	out	0x39, r24	; 57
+	DDRA |=(1 << Servo);     
+  be:	d5 9a       	sbi	0x1a, 5	; 26
+	DDRB &=~(1 << IRsensor);  
+  c0:	bc 98       	cbi	0x17, 4	; 23
+	DDRD &=~(1 << button);   
+  c2:	8e 98       	cbi	0x11, 6	; 17
+	PORTD |=(1 << button);  
+  c4:	96 9a       	sbi	0x12, 6	; 18
+	DDRD |=(1<<5); 	           
+  c6:	8d 9a       	sbi	0x11, 5	; 17
+	action |=(1<<0)|(1<<1);  
+  c8:	80 91 62 00 	lds	r24, 0x0062
+  cc:	90 91 63 00 	lds	r25, 0x0063
+  d0:	83 60       	ori	r24, 0x03	; 3
+  d2:	90 93 63 00 	sts	0x0063, r25
+  d6:	80 93 62 00 	sts	0x0062, r24
+	asm("sei");
+  da:	78 94       	sei
+  //===========//   
+    while(1)
+    {
+	   if (!( action &(1<<0) ))     // зафексировано срабатывание двтчика
+  dc:	80 91 62 00 	lds	r24, 0x0062
+  e0:	90 91 63 00 	lds	r25, 0x0063
+  e4:	80 fd       	sbrc	r24, 0
+  e6:	0f c0       	rjmp	.+30     	; 0x106 <main+0x5c>
+	    {		  	
+		  if(!(PINB & (1<<IRsensor)))  // как только датчик даст ноль ( нет движений )
+  e8:	b4 99       	sbic	0x16, 4	; 22
+  ea:	0b c0       	rjmp	.+22     	; 0x102 <main+0x58>
+		   {
+	         action |=(1<<0);       // готов к отслеживанию
+  ec:	80 91 62 00 	lds	r24, 0x0062
+  f0:	90 91 63 00 	lds	r25, 0x0063
+  f4:	81 60       	ori	r24, 0x01	; 1
+  f6:	90 93 63 00 	sts	0x0063, r25
+  fa:	80 93 62 00 	sts	0x0062, r24
+			 PORTD &=~(1<<5);          
+  fe:	95 98       	cbi	0x12, 5	; 18
+ 100:	ed cf       	rjmp	.-38     	; 0xdc <main+0x32>
+		   }			 
+		  else
+		     PORTD |=(1<<5);		    	
+ 102:	95 9a       	sbi	0x12, 5	; 18
+ 104:	eb cf       	rjmp	.-42     	; 0xdc <main+0x32>
+	    }
+	 //===================//		   				   
+	  else
+		{
+		  if (!( action & (1 << 1)))         // цикл отработан 
+ 106:	80 91 62 00 	lds	r24, 0x0062
+ 10a:	90 91 63 00 	lds	r25, 0x0063
+ 10e:	81 fd       	sbrc	r24, 1
+ 110:	41 c0       	rjmp	.+130    	; 0x194 <main+0xea>
+		   {
+		     if ( PINB & (1 << IRsensor))    // датчик движения зафиксировал 
+ 112:	b4 9b       	sbis	0x16, 4	; 22
+ 114:	11 c0       	rjmp	.+34     	; 0x138 <main+0x8e>
+		      {			  		    			
+			    pause2 = 0;                  // время работы двигателя
+ 116:	10 92 61 00 	sts	0x0061, r1
+ 11a:	10 92 60 00 	sts	0x0060, r1
+			    PORTA |=(1 << Servo);        // запуск мотора 
+ 11e:	dd 9a       	sbi	0x1b, 5	; 27
+				PORTC |=(1<<sound_output);  
+ 120:	af 9a       	sbi	0x15, 7	; 21
+				PORTC &=~(1<<sound_reset); 		        
+ 122:	a8 98       	cbi	0x15, 0	; 21
+			    action |=(1<<1);
+ 124:	80 91 62 00 	lds	r24, 0x0062
+ 128:	90 91 63 00 	lds	r25, 0x0063
+ 12c:	82 60       	ori	r24, 0x02	; 2
+ 12e:	90 93 63 00 	sts	0x0063, r25
+ 132:	80 93 62 00 	sts	0x0062, r24
+ 136:	d2 cf       	rjmp	.-92     	; 0xdc <main+0x32>
+		      }
+			  else
+			  {	
+				if (!(action & (1 << 2))) 
+ 138:	80 91 62 00 	lds	r24, 0x0062
+ 13c:	90 91 63 00 	lds	r25, 0x0063
+ 140:	82 fd       	sbrc	r24, 2
+ 142:	13 c0       	rjmp	.+38     	; 0x16a <main+0xc0>
+				 {
+				   if (!( PINC & (1<<sound_input))) // запуск звука 
+ 144:	99 99       	sbic	0x13, 1	; 19
+ 146:	02 c0       	rjmp	.+4      	; 0x14c <main+0xa2>
+					  PORTC &=~(1<<sound_output); 					  	
+ 148:	af 98       	cbi	0x15, 7	; 21
+ 14a:	c8 cf       	rjmp	.-112    	; 0xdc <main+0x32>
+					else
+					{
+					  PORTC |=(1<<sound_output);    // звук воспроизводится
+ 14c:	af 9a       	sbi	0x15, 7	; 21
+					  action |= (1 << 2); 
+ 14e:	80 91 62 00 	lds	r24, 0x0062
+ 152:	90 91 63 00 	lds	r25, 0x0063
+ 156:	84 60       	ori	r24, 0x04	; 4
+ 158:	90 93 63 00 	sts	0x0063, r25
+ 15c:	80 93 62 00 	sts	0x0062, r24
+					  pause2 = 0;	
+ 160:	10 92 61 00 	sts	0x0061, r1
+ 164:	10 92 60 00 	sts	0x0060, r1
+ 168:	b9 cf       	rjmp	.-142    	; 0xdc <main+0x32>
+					}										   	 
+				 }
+				else
+				 if (!( PINC & (1<<sound_input))) //  воспроизведение звука закончено
+ 16a:	99 99       	sbic	0x13, 1	; 19
+ 16c:	b7 cf       	rjmp	.-146    	; 0xdc <main+0x32>
+				  {		  
+					if ( pause2 > 50000 )   //пауза на включение звука
+ 16e:	80 91 60 00 	lds	r24, 0x0060
+ 172:	90 91 61 00 	lds	r25, 0x0061
+ 176:	23 ec       	ldi	r18, 0xC3	; 195
+ 178:	81 35       	cpi	r24, 0x51	; 81
+ 17a:	92 07       	cpc	r25, r18
+ 17c:	08 f4       	brcc	.+2      	; 0x180 <main+0xd6>
+ 17e:	ae cf       	rjmp	.-164    	; 0xdc <main+0x32>
+					 {
+					   action &=~ (1 << 2);
+ 180:	80 91 62 00 	lds	r24, 0x0062
+ 184:	90 91 63 00 	lds	r25, 0x0063
+ 188:	8b 7f       	andi	r24, 0xFB	; 251
+ 18a:	90 93 63 00 	sts	0x0063, r25
+ 18e:	80 93 62 00 	sts	0x0062, r24
+ 192:	a4 cf       	rjmp	.-184    	; 0xdc <main+0x32>
+				  }					     				    						  			  			  			  
+		     }
+		 }		  	 
+		else
+		  { 	
+		   if ( pause2 > 1000)            
+ 194:	80 91 60 00 	lds	r24, 0x0060
+ 198:	90 91 61 00 	lds	r25, 0x0061
+ 19c:	23 e0       	ldi	r18, 0x03	; 3
+ 19e:	89 3e       	cpi	r24, 0xE9	; 233
+ 1a0:	92 07       	cpc	r25, r18
+ 1a2:	58 f0       	brcs	.+22     	; 0x1ba <main+0x110>
+	        {
+		      PORTA &=~(1 << Servo);   // остановка мотора
+ 1a4:	dd 98       	cbi	0x1b, 5	; 27
+			  PORTC |=(1<<sound_reset);
+ 1a6:	a8 9a       	sbi	0x15, 0	; 21
+		      pause2 = 0; 
+ 1a8:	10 92 61 00 	sts	0x0061, r1
+ 1ac:	10 92 60 00 	sts	0x0060, r1
+			  if ( PIND & (1<<5))      // в каком состоянии светодиод сигнальный
+ 1b0:	85 9b       	sbis	0x10, 5	; 16
+ 1b2:	02 c0       	rjmp	.+4      	; 0x1b8 <main+0x10e>
+				PORTD &=~(1<<5);      
+ 1b4:	95 98       	cbi	0x12, 5	; 18
+ 1b6:	01 c0       	rjmp	.+2      	; 0x1ba <main+0x110>
+			  else
+				PORTD |=(1<<5);   			   	
+ 1b8:	95 9a       	sbi	0x12, 5	; 18
+	        }	   							   		 			 
+		   if (!( PIND & (1<<button) ))  // запуск цикла сначала (кнопка)
+ 1ba:	86 99       	sbic	0x10, 6	; 16
+ 1bc:	8f cf       	rjmp	.-226    	; 0xdc <main+0x32>
+			 action = 0;             	  		  				
+ 1be:	10 92 63 00 	sts	0x0063, r1
+ 1c2:	10 92 62 00 	sts	0x0062, r1
+ 1c6:	8a cf       	rjmp	.-236    	; 0xdc <main+0x32>
+
+000001c8 <_exit>:
+ 1c8:	f8 94       	cli
+
+000001ca <__stop_program>:
+ 1ca:	ff cf       	rjmp	.-2      	; 0x1ca <__stop_program>
